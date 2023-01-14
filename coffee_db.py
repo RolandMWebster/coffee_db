@@ -1,6 +1,4 @@
-import time
+import streamlit as st
 
-while True:
 
-    time.sleep(10)
-    print("Hello, Coffee World!")
+st.title("Hello Coffee World!")
