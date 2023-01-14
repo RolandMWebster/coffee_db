@@ -1,1 +1,1 @@
-worker: python coffee_db.py
+web: sh setup.sh && streamlit run coffee_db.py
