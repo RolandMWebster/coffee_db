@@ -19,4 +19,4 @@ with form:
     country = st.text_input("Country")
     submit = st.form_submit_button("Add")
     if submit:
-        db.insert_coffee((coffee_id, roastery, country,))
+        db.insert_coffee((int(coffee_id), roastery, country,))
