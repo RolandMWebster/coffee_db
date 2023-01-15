@@ -17,7 +17,7 @@ class CoffeeDB():
 
         return psycopg2.connect(
             self.db_url
-        ).cursor()
+        )
 
     def get_data(self):
 
@@ -33,5 +33,5 @@ class CoffeeDB():
             VALUES (%s)
         """
 
-        with self._connect() as con:
-            con.execute(query, values)
+        with self._connect().cursor() as cur:
+            cur.execute(query, values)
