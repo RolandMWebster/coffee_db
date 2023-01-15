@@ -16,7 +16,7 @@ class CoffeeDB():
     def _connect(self):
 
         return psycopg2.connect(
-            self.DATABSE_URL
+            self.db_url
         ).cursor()
 
     def get_data(self):
