@@ -1,7 +1,9 @@
 import os
 
-# grab the heroku URL, else use the local one
+from coffee_db.database.config import config
+
+
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
-    "dbname=postgres"
+    config(),
 )

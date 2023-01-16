@@ -18,9 +18,7 @@ class CoffeeDB():
         Generate a psycopg2 connection object.
         """
 
-        return psycopg2.connect(
-            self.db_url
-        )
+        return psycopg2.connect(self.db_url)
 
     def _execute(self, query: str, values: tuple = None) -> list[dict]:
         """
