@@ -21,12 +21,17 @@ class Country(BaseModel):
         loc = geolocator.geocode(self.name)
         return (loc.latitude, loc.longitude)
 
+    def __str__(self):
+        return(self.name)
+
 
 class Roastery(BaseModel):
     id: int
     name: str
-    location: Optional[Country] = None
+    country: Country
 
+    def __str__(self):
+        return(self.name)
 
 class Coffee(BaseModel):
     id: int
@@ -35,8 +40,6 @@ class Coffee(BaseModel):
     roastery: Roastery
     elevation: int
 
+    def __str__(self):
+        return(self.name)
 
-class Roastery(BaseModel):
-    id: int
-    name: str
-    country: Country
