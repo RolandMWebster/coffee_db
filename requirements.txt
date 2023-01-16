@@ -1,0 +1,6 @@
+streamlit==1.17.0
+psycopg2-binary==2.9.5
+geopy==2.3.0
+folium==0.14.0
+pydantic==1.10.4
+streamlit-folium==0.10.0
