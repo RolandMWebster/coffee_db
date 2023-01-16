@@ -14,7 +14,7 @@ def main():
 
     folium_static(plot_map())
 
-    add_tables()
+    #add_tables()
 
     add_forms()
     remove_forms()
@@ -28,29 +28,31 @@ def add_tables():
 
 def add_forms():
 
-    col1, col2, col3 = st.columns(3)
+    with st.expander("Add Entry"):
+        col1, col2, col3 = st.columns(3)
 
-    with col1:
-        add_coffee_form()
-    with col2:
-        add_roastery_form()
-    with col3:
-        add_country_form()
+        with col1:
+            add_coffee_form()
+        with col2:
+            add_roastery_form()
+        with col3:
+            add_country_form()
 
 
 def remove_forms():
 
-    col1, col2, col3 = st.columns(3)
+    with st.expander("Delete Entry"):
+        col1, col2, col3 = st.columns(3)
 
-    with col1:
-        remove_coffee_form()
-    with col2:
-        remove_roastery_form()
-    with col3:
-        remove_country_form()
+        with col1:
+            remove_coffee_form()
+        with col2:
+            remove_roastery_form()
+        with col3:
+            remove_country_form()
 
 def add_coffee_form():
-    st.header("Add Coffee")
+    st.header("Coffee")
     with st.form(key="add_coffee", clear_on_submit=True):
         name = st.text_input("Name")
         country_of_origin = st.selectbox(
@@ -75,7 +77,7 @@ def add_coffee_form():
 
 
 def remove_coffee_form():
-    st.header("Remove Coffee")
+    st.header("Coffee")
     with st.form(key="remove_coffee", clear_on_submit=True):
         coffee_id = st.text_input("ID")
         submit = st.form_submit_button("Remove")
@@ -87,7 +89,7 @@ def remove_coffee_form():
 
 
 def add_roastery_form():
-    st.header("Add Roastery")
+    st.header("Roastery")
     with st.form(key="add_roastery", clear_on_submit=True):
         name = st.text_input("Name")
         country = st.selectbox(
@@ -106,7 +108,7 @@ def add_roastery_form():
 
 
 def remove_roastery_form():
-    st.header("Remove Roastery")
+    st.header("Roastery")
     with st.form(key="remove_roastery", clear_on_submit=True):
         roastery_id = st.text_input("ID")
         submit = st.form_submit_button("Remove")
@@ -118,7 +120,7 @@ def remove_roastery_form():
 
 
 def add_country_form():
-    st.header("Add Country")
+    st.header("Country")
     with st.form(key="add_country", clear_on_submit=True):
         name = st.text_input("Name")
         submit = st.form_submit_button("Add")
@@ -128,7 +130,7 @@ def add_country_form():
 
 
 def remove_country_form():
-    st.header("Remove Country")
+    st.header("Country")
     with st.form(key="remove_country", clear_on_submit=True):
         country_id = st.text_input("ID")
         submit = st.form_submit_button("Remove")
