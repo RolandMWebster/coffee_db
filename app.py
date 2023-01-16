@@ -1,7 +1,7 @@
 import copy
 
 import streamlit as st
-from streamlit_folium import st_folium
+from streamlit_folium import folium_static
 
 from coffee_db import CoffeeDB
 from coffee_db.coffee import Coffee, Roastery, Country
@@ -10,10 +10,9 @@ from coffee_db.visualizations.world_map_visualizer import MapVisualizer
 
 def main():
 
-    # Title and Overview of Data
     st.title("Hello Coffee World!")
 
-    st_folium(plot_map())
+    folium_static(plot_map())
 
     st.dataframe(coffees)
     st.dataframe(roasteries)

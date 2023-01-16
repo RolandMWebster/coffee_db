@@ -9,7 +9,7 @@ class MapVisualizer:
         """
         PLots a world map with cluster points for coffee counts by country.
         """
-        world_map = folium.Map(tiles="cartodbpositron")
+        world_map = folium.Map(tiles="cartodbpositron", max_bounds=True)
         marker_cluster = MarkerCluster().add_to(world_map)
 
         coffee_counts_by_country = get_coffees_by_country(coffees)

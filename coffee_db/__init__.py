@@ -1,1 +1,1 @@
-from coffee_db.coffee_db import CoffeeDB
+from coffee_db.database.heroku_psql import CoffeeDB
