@@ -1,6 +1,6 @@
 import copy
 
-from coffee_db.coffee import Country, Roastery, Coffee
+from coffee_db.coffee import Country, Roastery, Coffee, Process, Variety
 from coffee_db import CoffeeDB
 
 
@@ -21,6 +21,26 @@ class PostgresDataLoader:
             countries_dict[country["name"]] = Country(**country)
         return countries_dict
     
+    def _get_varieties(self) -> dict[str, Variety]:
+        """
+        Builds Variety pydantic models from the db data.
+        """
+        varieties = self.db.get_data("variety")
+        varieties_dict: dict[str, Variety] = {}
+        for variety in varieties:
+            varieties_dict[variety["name"]] = Variety(**variety)
+        return varieties_dict
+
+    def _get_processes(self) -> dict[str, Process]:
+        """
+        Builds Process pydantic models from the db data.
+        """
+        processes = self.db.get_data("process")
+        processes_dict: dict[str, Process] = {}
+        for process in processes:
+            processes_dict[process["name"]] = Process(**process)
+        return processes_dict
+    
     def _get_roasteries(self, countries: dict[str, Country]) -> dict[str, Roastery]:
         """
         Builds Roastery pydantic models from the db data.
@@ -40,7 +60,11 @@ class PostgresDataLoader:
         return roasteries_dict
 
     def _get_coffees(
-        self, countries: dict[str, Country], roasteries: dict[str, Roastery]
+        self,
+        countries: dict[str, Country],
+        roasteries: dict[str, Roastery],
+        varieties: dict[str, Variety],
+        processes: dict[str, Process],
     ) -> dict[str, Coffee]:
         """
         Builds Coffee pydantic models from the db data.
@@ -49,28 +73,35 @@ class PostgresDataLoader:
         coffees_dict: dict[str, Coffee] = {}
         coffees_copy = copy.deepcopy(coffees)
         for coffee in coffees_copy:
-            try:
-                coffee["roastery"] = roasteries[coffee["roastery"]]
-            except KeyError:
-                raise KeyError(
-                    f"Coffee {coffee['name']} is from unknown roastery {coffee['roastery']}."
-                    f"Ensure {coffee['roastery']} is in the roastery table."
-                )
-            try:
-                coffee["country_of_origin"] = countries[coffee["country_of_origin"]]
-            except KeyError:
-                raise KeyError(
-                    f"Coffee {coffee['name']} is from unknown country {coffee['country']}."
-                    f"Ensure {coffee['country']} is in the country table."
-                )
+            for coffee_attr in [
+                ("roastery", roasteries),
+                ("country_of_origin", countries),
+                ("varietal", varieties),
+                ("process", processes)
+            ]:
+                try:
+                    coffee[coffee_attr[0]] = coffee_attr[1][coffee[coffee_attr[0]]]
+                except KeyError:
+                    raise KeyError(
+                        f"Coffee {coffee['name']} is from unknown {coffee_attr[0]} {coffee[coffee_attr[0]]}."
+                        f"Ensure {coffee[coffee_attr[0]]} is in the {coffee_attr[0]} table."
+                    )
             coffees_dict[coffee["name"]] = Coffee(**coffee)
         return coffees_dict
 
     def get_data(self) -> tuple[list[Country], list[Roastery], list[Coffee]]:
         """
-        Returns pydantic data models for Coffees, Roasteries, and Countries.
+        Returns pydantic data models for Coffees, Roasteries, Countries, Process and Varieties.
         """
         countries = self._get_countries()
+        processes = self._get_processes()
+        varieties = self._get_varieties()
         roasteries = self._get_roasteries(countries)
-        coffees = self._get_coffees(countries, roasteries)
-        return (list(countries.values()), list(roasteries.values()), list(coffees.values()))
+        coffees = self._get_coffees(countries, roasteries, varieties, processes)
+        return (
+            list(countries.values()),
+            list(roasteries.values()),
+            list(coffees.values()),
+            list(processes.values()),
+            list(varieties.values())
+        )
