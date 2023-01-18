@@ -14,16 +14,31 @@ def main():
 
     folium_static(plot_map())
 
-    #add_tables()
+    show_tables()
 
     add_forms()
     remove_forms()
 
 
-def add_tables():
-    st.dataframe(pd.DataFrame([dict(coffee) for coffee in coffees]))
-    st.dataframe(pd.DataFrame([dict(roastery) for roastery in roasteries]))
-    st.dataframe(pd.DataFrame([dict(country) for country in countries]))
+def show_tables():
+
+    TABLE_CHOICES = [
+        ("none", "none"),
+        ("coffees", coffees),
+        ("roasteries", roasteries),
+        ("countries", countries),
+    ]
+
+    option = st.selectbox(
+        "Show Table",
+        options=TABLE_CHOICES,
+        format_func=lambda x: x[0],
+    )
+
+    if option[1] == "none":
+        pass
+    else:
+        st.dataframe(pd.DataFrame([dict(x) for x in option[1]]))
 
 
 def add_forms():
