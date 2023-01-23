@@ -85,6 +85,8 @@ def add_coffee_form():
                     name,
                     country_of_origin,
                     roastery,
+                    process,
+                    variety,
                     elevation,
                 ),
             )
