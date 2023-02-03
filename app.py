@@ -44,27 +44,23 @@ def show_tables():
 def add_forms():
 
     with st.expander("Add Entry"):
-        col1, col2, col3 = st.columns(3)
+        add_coffee_form()
+        add_roastery_form()
+        add_country_form()
+        add_process_form()
+        add_variety_form()
 
-        with col1:
-            add_coffee_form()
-        with col2:
-            add_roastery_form()
-        with col3:
-            add_country_form()
 
 
 def remove_forms():
 
     with st.expander("Delete Entry"):
-        col1, col2, col3 = st.columns(3)
+        remove_coffee_form()
+        remove_roastery_form()
+        remove_country_form()
+        remove_process_form()
+        remove_variety_form()
 
-        with col1:
-            remove_coffee_form()
-        with col2:
-            remove_roastery_form()
-        with col3:
-            remove_country_form()
 
 def add_coffee_form():
     st.header("Coffee")
@@ -76,7 +72,15 @@ def add_coffee_form():
         roastery = st.selectbox(
             "Roastery", (roastery.name for roastery in roasteries)
         )
+        process = st.selectbox(
+            "Process", (process.name for process in processes)
+        )
+        variety = st.selectbox(
+            "Variety", (variety.name for variety in varieties)
+        )
         elevation = st.text_input("Elevation")
+        if elevation == "":
+            elevation = None
         submit = st.form_submit_button("Add")
         if submit:
             db.insert_row(
@@ -85,6 +89,8 @@ def add_coffee_form():
                     name,
                     country_of_origin,
                     roastery,
+                    process,
+                    variety,
                     elevation,
                 ),
             )
@@ -154,6 +160,46 @@ def remove_country_form():
             st.experimental_rerun()
 
 
+def add_process_form():
+    st.header("Process")
+    with st.form(key="add_process", clear_on_submit=True):
+        name = st.text_input("Name")
+        submit = st.form_submit_button("Add")
+        if submit:
+            db.insert_row("process", (name,))
+            st.experimental_rerun()
+
+
+def remove_process_form():
+    st.header("Process")
+    with st.form(key="remove_process", clear_on_submit=True):
+        process_id = st.text_input("ID")
+        submit = st.form_submit_button("Remove")
+        if submit:
+            db.remove_row("process", (int(process_id),))
+            st.experimental_rerun()
+
+
+def add_variety_form():
+    st.header("Variety")
+    with st.form(key="add_variety", clear_on_submit=True):
+        name = st.text_input("Name")
+        submit = st.form_submit_button("Add")
+        if submit:
+            db.insert_row("variety", (name,))
+            st.experimental_rerun()
+
+
+def remove_variety_form():
+    st.header("Variety")
+    with st.form(key="remove_variety", clear_on_submit=True):
+        variety_id = st.text_input("ID")
+        submit = st.form_submit_button("Remove")
+        if submit:
+            db.remove_row("variety", (int(variety_id),))
+            st.experimental_rerun()
+
+
 def plot_map():
 
     visualizer = MapVisualizer()
@@ -165,6 +211,6 @@ if __name__ == "__main__":
     db = CoffeeDB()
     data_loader = PostgresDataLoader(db=db)
 
-    countries, roasteries, coffees = data_loader.get_data()
+    countries, roasteries, coffees, processes, varieties = data_loader.get_data()
 
     main()

@@ -33,13 +33,30 @@ class Roastery(BaseModel):
     def __str__(self):
         return(self.name)
 
+
+class Variety(BaseModel):
+    id: int
+    name: str
+
+    def __str__(self):
+        return(self.name)
+
+class Process(BaseModel):
+    id: int
+    name: str
+
+    def __str__(self):
+        return(self.name)
+
+
 class Coffee(BaseModel):
     id: int
     name: str
     country_of_origin: Country
     roastery: Roastery
-    elevation: int
+    process: Process
+    varietal: Variety
+    elevation: Optional[int] = None
 
     def __str__(self):
         return(self.name)
-
