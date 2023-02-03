@@ -56,7 +56,7 @@ class Coffee(BaseModel):
     roastery: Roastery
     process: Process
     varietal: Variety
-    elevation: int
+    elevation: Optional[int] = None
 
     def __str__(self):
         return(self.name)

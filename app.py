@@ -29,35 +29,22 @@ def add_tables():
 def add_forms():
 
     with st.expander("Add Entry"):
-        col1, col2, col3, col4, col5 = st.columns(5)
+        add_coffee_form()
+        add_roastery_form()
+        add_country_form()
+        add_process_form()
+        add_variety_form()
 
-        with col1:
-            add_coffee_form()
-        with col2:
-            add_roastery_form()
-        with col3:
-            add_country_form()
-        with col4:
-            add_process_form()
-        with col5:
-            add_variety_form()
 
 
 def remove_forms():
 
     with st.expander("Delete Entry"):
-        col1, col2, col3, col4, col5 = st.columns(5)
-
-        with col1:
-            remove_coffee_form()
-        with col2:
-            remove_roastery_form()
-        with col3:
-            remove_country_form()
-        with col4:
-            remove_process_form()
-        with col5:
-            remove_variety_form()
+        remove_coffee_form()
+        remove_roastery_form()
+        remove_country_form()
+        remove_process_form()
+        remove_variety_form()
 
 
 def add_coffee_form():
@@ -77,6 +64,8 @@ def add_coffee_form():
             "Variety", (variety.name for variety in varieties)
         )
         elevation = st.text_input("Elevation")
+        if elevation == "":
+            elevation = None
         submit = st.form_submit_button("Add")
         if submit:
             db.insert_row(
