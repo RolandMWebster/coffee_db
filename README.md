@@ -47,3 +47,22 @@ Use the following command to interact with the deployed psql database:
 ```
 heroku pg:psql
 ```
+
+### Setting up the AWS backend store for Terraform
+NOTE: This process has already been run, and does not need to be done again. This is simply documenting the process that was taken.
+
+Navigate into the following directory:
+```
+coffee-db-terraform/terraform-backend
+```
+
+Set the following environment variables:
+```
+export AWS_ACCESS_KEY_ID=<access_key_id>
+export AWS_SECRET_ACCESS_KEY=<secret_access_key>
+```
+
+Run the terraform commands
+```
+terraform init && terraform apply
+```
