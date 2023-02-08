@@ -1,11 +1,24 @@
-# Create a new Heroku app
-resource "heroku_app" "default" {
-  name = "webster-and-webster-test-app"
-  region = "eu"
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
 }
 
-# Create a database, and configure the app to use it
-resource "heroku_addon" "database" {
-  app_id = heroku_app.default.id
-  plan   = "heroku-postgresql:mini"
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+
+  tags = {
+    Name = "HelloWorld"
+  }
 }

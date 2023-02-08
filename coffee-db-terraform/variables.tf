@@ -1,2 +1,7 @@
-variable "heroku_email" {}
-variable "heroku_token" {}
+variable "aws_access_key" {
+  type = string
+}
+
+variable "aws_secret_key" {
+  type = string
+}
