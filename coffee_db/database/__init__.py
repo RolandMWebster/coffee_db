@@ -1,8 +1,14 @@
 import os
 
 from coffee_db.database.config import config
+from coffee_db.database.aws_utils import get_aws_url
 
-if "DATABASE_URL" in os.environ.keys():
+
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "LOCAL")
+
+if ENVIRONMENT == "HEROKU":
     DATABASE_URL = os.environ["DATABASE_URL"]
-else:
+elif ENVIRONMENT == "AWS":
+    DATABASE_URL = get_aws_url()
+elif ENVIRONMENT == "LOCAL":
     DATABASE_URL = config()
