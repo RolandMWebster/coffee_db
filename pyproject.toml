@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "coffee-db"
+version = "0.1.0"
+description = ""
+authors = ["Ned Webster <edwardpwebster@gmail.com>"]
+readme = "README.md"
+packages = [{include = "coffee_db"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
+streamlit = "^1.19.0"
+psycopg2-binary = "2.9.5"
+geopy = "2.3.0"
+folium = "0.14.0"
+pydantic = "1.10.4"
+streamlit-folium = "^0.11.1"
+boto3 = "^1.26.83"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
