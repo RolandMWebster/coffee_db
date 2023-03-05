@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "terraform-backend-state-npw"
+  bucket = "terraform-coffee-db-rds-psql"
 }
 
 resource "aws_s3_bucket_acl" "state_bucket_acl" {
