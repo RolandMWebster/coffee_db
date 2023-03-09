@@ -22,7 +22,7 @@ class Country(BaseModel):
         return (loc.latitude, loc.longitude)
 
     def __str__(self):
-        return(self.name)
+        return self.name
 
 
 class Roastery(BaseModel):
@@ -31,7 +31,7 @@ class Roastery(BaseModel):
     country: Country
 
     def __str__(self):
-        return(self.name)
+        return self.name
 
 
 class Variety(BaseModel):
@@ -39,14 +39,15 @@ class Variety(BaseModel):
     name: str
 
     def __str__(self):
-        return(self.name)
+        return self.name
+
 
 class Process(BaseModel):
     id: int
     name: str
 
     def __str__(self):
-        return(self.name)
+        return self.name
 
 
 class Coffee(BaseModel):
@@ -59,4 +60,4 @@ class Coffee(BaseModel):
     elevation: Optional[int] = None
 
     def __str__(self):
-        return(self.name)
+        return self.name
