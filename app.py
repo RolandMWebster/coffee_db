@@ -16,7 +16,7 @@ def main():
 
     folium_static(plot_map())
 
-    #show_tables()
+    show_tables()
 
     add_forms()
     remove_forms()
@@ -40,7 +40,7 @@ def show_tables():
     if option[1] == "none":
         pass
     else:
-        st.dataframe(pd.DataFrame([dict(x) for x in option[1]]))
+        st.dataframe(pd.DataFrame([dict(x) for x in option[1]]).astype(str))
 
 
 def add_forms():
