@@ -51,9 +51,18 @@ class Process(BaseModel):
         return self.name
 
 
+class CoffeeUser(BaseModel):
+    id: int
+    name: str
+
+    def __str__(self):
+        return self.name
+
+
 class Coffee(BaseModel):
     id: int
     date_added: datetime.datetime
+    added_by: CoffeeUser
     name: str
     country_of_origin: Country
     roastery: Roastery

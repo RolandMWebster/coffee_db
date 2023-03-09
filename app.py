@@ -16,7 +16,7 @@ def main():
 
     folium_static(plot_map())
 
-    show_tables()
+    #show_tables()
 
     add_forms()
     remove_forms()
@@ -68,6 +68,9 @@ def add_coffee_form():
     st.header("Coffee")
     with st.form(key="add_coffee", clear_on_submit=True):
         name = st.text_input("Name")
+        coffee_user = st.selectbox(
+            "CoffeeUser", (coffee_user.name for coffee_user in coffee_users)
+        )
         country_of_origin = st.selectbox(
             "Country of Origin", (country.name for country in countries)
         )
@@ -90,6 +93,7 @@ def add_coffee_form():
                 "coffee",
                 (
                     date_added,
+                    coffee_user,
                     name,
                     country_of_origin,
                     roastery,
@@ -215,6 +219,6 @@ if __name__ == "__main__":
     db = CoffeeDB()
     data_loader = PostgresDataLoader(db=db)
 
-    countries, roasteries, coffees, processes, varieties = data_loader.get_data()
+    countries, roasteries, coffees, processes, varieties, coffee_users = data_loader.get_data()
 
     main()
