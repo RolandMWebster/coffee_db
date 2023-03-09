@@ -7,4 +7,5 @@ resource "aws_db_instance" "coffee_db" {
   password               = var.rds_password
   skip_final_snapshot    = true
   vpc_security_group_ids = ["${aws_security_group.rds_security_group.id}"]
+  publicly_accessible    = true
 }
