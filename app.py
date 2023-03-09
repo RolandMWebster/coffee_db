@@ -1,3 +1,5 @@
+from datetime import datetime
+from pytz import timezone
 
 import streamlit as st
 from streamlit_folium import folium_static
@@ -83,9 +85,11 @@ def add_coffee_form():
             elevation = None
         submit = st.form_submit_button("Add")
         if submit:
+            date_added = datetime.now(tz=timezone("GMT")).strftime('%Y-%m-%d %H:%M:%S')
             db.insert_row(
                 "coffee",
                 (
+                    date_added,
                     name,
                     country_of_origin,
                     roastery,

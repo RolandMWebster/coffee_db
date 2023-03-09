@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 from pydantic import BaseModel
 from geopy.geocoders import Nominatim
@@ -52,6 +53,7 @@ class Process(BaseModel):
 
 class Coffee(BaseModel):
     id: int
+    date_added: datetime.datetime
     name: str
     country_of_origin: Country
     roastery: Roastery
