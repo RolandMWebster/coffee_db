@@ -87,7 +87,6 @@ class PostgresDataLoader:
             for coffee_attr in [
                 ("roastery", roasteries),
                 ("country_of_origin", countries),
-                ("varietal", varieties),
                 ("process", processes),
                 ("added_by", coffee_users),
             ]:
@@ -95,9 +94,23 @@ class PostgresDataLoader:
                     coffee[coffee_attr[0]] = coffee_attr[1][coffee[coffee_attr[0]]]
                 except KeyError:
                     raise KeyError(
-                        f"Coffee {coffee['name']} is from unknown {coffee_attr[0]} {coffee[coffee_attr[0]]}."
+                        f"Coffee {coffee['name']} has unknown {coffee_attr[0]} {coffee[coffee_attr[0]]}."
                         f"Ensure {coffee[coffee_attr[0]]} is in the {coffee_attr[0]} table."
                     )
+            for coffee_attr in [
+                ("varietal", varieties)
+            ]:
+                updated_attr = []
+                for list_item in coffee[coffee_attr[0]].split(", "):
+                    try:
+                        updated_attr.append(coffee_attr[1][list_item])
+                    except KeyError:
+                        raise KeyError(
+                            f"Coffee {coffee['name']} has unknown {coffee_attr[0]} {list_item}."
+                            f"Ensure {list_item} is in the {coffee_attr[0]} table."
+                        )
+                coffee[coffee_attr[0]] = updated_attr
+
             coffees_dict[coffee["name"]] = Coffee(**coffee)
         return coffees_dict
 

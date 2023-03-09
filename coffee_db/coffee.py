@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel
 from geopy.geocoders import Nominatim
 
@@ -67,7 +67,7 @@ class Coffee(BaseModel):
     country_of_origin: Country
     roastery: Roastery
     process: Process
-    varietal: Variety
+    varietal: List[Variety]
     elevation: Optional[int] = None
     tasting_notes: Optional[str] = None
 

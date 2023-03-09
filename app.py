@@ -26,9 +26,9 @@ def show_tables():
 
     TABLE_CHOICES = [
         ("none", "none"),
-        ("coffees", coffees),
-        ("roasteries", roasteries),
-        ("countries", countries),
+        ("coffee", coffees),
+        ("roastery", roasteries),
+        ("country", countries),
     ]
 
     option = st.selectbox(
@@ -40,7 +40,8 @@ def show_tables():
     if option[1] == "none":
         pass
     else:
-        st.dataframe(pd.DataFrame([dict(x) for x in option[1]]).astype(str))
+        data = db.get_data(option[0])
+        st.dataframe(data)
 
 
 def add_forms():
@@ -80,9 +81,12 @@ def add_coffee_form():
         process = st.selectbox(
             "Process", (process.name for process in processes)
         )
-        variety = st.selectbox(
+
+        variety = st.multiselect(
             "Variety", (variety.name for variety in varieties)
         )
+        variety = ", ".join(variety)
+
         elevation = st.text_input("Elevation")
         if elevation == "":
             elevation = None
