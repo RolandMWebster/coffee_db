@@ -86,6 +86,10 @@ def add_coffee_form():
         elevation = st.text_input("Elevation")
         if elevation == "":
             elevation = None
+        tasting_notes = st.text_input("Tasting Notes")
+        if tasting_notes == "":
+            tasting_notes = None
+
         submit = st.form_submit_button("Add")
         if submit:
             date_added = datetime.now(tz=timezone("GMT")).strftime('%Y-%m-%d %H:%M:%S')
@@ -100,6 +104,7 @@ def add_coffee_form():
                     process,
                     variety,
                     elevation,
+                    tasting_notes,
                 ),
             )
             st.experimental_rerun()
