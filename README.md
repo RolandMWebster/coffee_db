@@ -17,13 +17,21 @@ user=your_user
 password=your_password
 ```
 
-Install the requirements
+Install the requirements either through `Poetry` or through the `requirements.txt`.
 
-```pip install -r requirements.txt```
+```
+pip install -r requirements.txt
+```
+or
+```
+poetry install
+```
 
 Then run the streamlit app from the root directory.
 
-```streamlit run app.py```
+```
+streamlit run app.py
+```
 
 
 
@@ -46,4 +54,11 @@ Use the following command to interact with the deployed psql database:
 
 ```
 heroku pg:psql
+```
+
+
+## Package management with Poetry and requirements.txt
+The project uses `poetry` for it's package management. However, the Python buildpack for Heroku requires a `requirements.txt` ([see docs](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-python)) file to be available. To generate the `requirements.txt` from the `poetry` environment, run the following command:
+```
+poetry export --without-hashes --format=requirements.txt > requirements.txt
 ```
