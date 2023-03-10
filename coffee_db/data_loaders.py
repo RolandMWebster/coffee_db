@@ -1,6 +1,6 @@
 import copy
 
-from coffee_db.coffee import Country, Roastery, Coffee, Process, Variety
+from coffee_db.coffee import Country, Roastery, Coffee, Process, CoffeeUser, Variety
 from coffee_db import CoffeeDB
 
 
@@ -20,7 +20,7 @@ class PostgresDataLoader:
         for country in countries:
             countries_dict[country["name"]] = Country(**country)
         return countries_dict
-    
+
     def _get_varieties(self) -> dict[str, Variety]:
         """
         Builds Variety pydantic models from the db data.
@@ -59,12 +59,23 @@ class PostgresDataLoader:
             roasteries_dict[roastery["name"]] = Roastery(**roastery)
         return roasteries_dict
 
+    def _get_coffee_users(self) -> dict[str, Variety]:
+        """
+        Builds CoffeeUser pydantic models from the db data.
+        """
+        coffee_users = self.db.get_data("coffee_user")
+        coffee_users_dict: dict[str, CoffeeUser] = {}
+        for coffee_user in coffee_users:
+            coffee_users_dict[coffee_user["name"]] = CoffeeUser(**coffee_user)
+        return coffee_users_dict
+
     def _get_coffees(
         self,
         countries: dict[str, Country],
         roasteries: dict[str, Roastery],
         varieties: dict[str, Variety],
         processes: dict[str, Process],
+        coffee_users: dict[str, CoffeeUser],
     ) -> dict[str, Coffee]:
         """
         Builds Coffee pydantic models from the db data.
@@ -76,16 +87,30 @@ class PostgresDataLoader:
             for coffee_attr in [
                 ("roastery", roasteries),
                 ("country_of_origin", countries),
-                ("varietal", varieties),
-                ("process", processes)
+                ("process", processes),
+                ("added_by", coffee_users),
             ]:
                 try:
                     coffee[coffee_attr[0]] = coffee_attr[1][coffee[coffee_attr[0]]]
                 except KeyError:
                     raise KeyError(
-                        f"Coffee {coffee['name']} is from unknown {coffee_attr[0]} {coffee[coffee_attr[0]]}."
+                        f"Coffee {coffee['name']} has unknown {coffee_attr[0]} {coffee[coffee_attr[0]]}."
                         f"Ensure {coffee[coffee_attr[0]]} is in the {coffee_attr[0]} table."
                     )
+            for coffee_attr in [
+                ("varietal", varieties)
+            ]:
+                updated_attr = []
+                for list_item in coffee[coffee_attr[0]].split(", "):
+                    try:
+                        updated_attr.append(coffee_attr[1][list_item])
+                    except KeyError:
+                        raise KeyError(
+                            f"Coffee {coffee['name']} has unknown {coffee_attr[0]} {list_item}."
+                            f"Ensure {list_item} is in the {coffee_attr[0]} table."
+                        )
+                coffee[coffee_attr[0]] = updated_attr
+
             coffees_dict[coffee["name"]] = Coffee(**coffee)
         return coffees_dict
 
@@ -95,13 +120,15 @@ class PostgresDataLoader:
         """
         countries = self._get_countries()
         processes = self._get_processes()
+        coffee_users = self._get_coffee_users()
         varieties = self._get_varieties()
         roasteries = self._get_roasteries(countries)
-        coffees = self._get_coffees(countries, roasteries, varieties, processes)
+        coffees = self._get_coffees(countries, roasteries, varieties, processes, coffee_users)
         return (
             list(countries.values()),
             list(roasteries.values()),
             list(coffees.values()),
             list(processes.values()),
-            list(varieties.values())
+            list(varieties.values()),
+            list(coffee_users.values())
         )

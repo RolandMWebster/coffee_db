@@ -1,3 +1,5 @@
+from datetime import datetime
+from pytz import timezone
 
 import streamlit as st
 from streamlit_folium import folium_static
@@ -24,9 +26,9 @@ def show_tables():
 
     TABLE_CHOICES = [
         ("none", "none"),
-        ("coffees", coffees),
-        ("roasteries", roasteries),
-        ("countries", countries),
+        ("coffee", coffees),
+        ("roastery", roasteries),
+        ("country", countries),
     ]
 
     option = st.selectbox(
@@ -38,7 +40,8 @@ def show_tables():
     if option[1] == "none":
         pass
     else:
-        st.dataframe(pd.DataFrame([dict(x) for x in option[1]]))
+        data = db.get_data(option[0])
+        st.dataframe(data)
 
 
 def add_forms():
@@ -66,6 +69,9 @@ def add_coffee_form():
     st.header("Coffee")
     with st.form(key="add_coffee", clear_on_submit=True):
         name = st.text_input("Name")
+        coffee_user = st.selectbox(
+            "CoffeeUser", (coffee_user.name for coffee_user in coffee_users)
+        )
         country_of_origin = st.selectbox(
             "Country of Origin", (country.name for country in countries)
         )
@@ -75,23 +81,34 @@ def add_coffee_form():
         process = st.selectbox(
             "Process", (process.name for process in processes)
         )
-        variety = st.selectbox(
+
+        variety = st.multiselect(
             "Variety", (variety.name for variety in varieties)
         )
+        variety = ", ".join(variety)
+
         elevation = st.text_input("Elevation")
         if elevation == "":
             elevation = None
+        tasting_notes = st.text_input("Tasting Notes")
+        if tasting_notes == "":
+            tasting_notes = None
+
         submit = st.form_submit_button("Add")
         if submit:
+            date_added = datetime.now(tz=timezone("GMT")).strftime('%Y-%m-%d %H:%M:%S')
             db.insert_row(
                 "coffee",
                 (
+                    date_added,
+                    coffee_user,
                     name,
                     country_of_origin,
                     roastery,
                     process,
                     variety,
                     elevation,
+                    tasting_notes,
                 ),
             )
             st.experimental_rerun()
@@ -211,6 +228,6 @@ if __name__ == "__main__":
     db = CoffeeDB()
     data_loader = PostgresDataLoader(db=db)
 
-    countries, roasteries, coffees, processes, varieties = data_loader.get_data()
+    countries, roasteries, coffees, processes, varieties, coffee_users = data_loader.get_data()
 
     main()

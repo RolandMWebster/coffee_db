@@ -1,4 +1,5 @@
-from typing import Optional
+import datetime
+from typing import List, Optional
 from pydantic import BaseModel
 from geopy.geocoders import Nominatim
 
@@ -22,7 +23,7 @@ class Country(BaseModel):
         return (loc.latitude, loc.longitude)
 
     def __str__(self):
-        return(self.name)
+        return self.name
 
 
 class Roastery(BaseModel):
@@ -31,7 +32,7 @@ class Roastery(BaseModel):
     country: Country
 
     def __str__(self):
-        return(self.name)
+        return self.name
 
 
 class Variety(BaseModel):
@@ -39,24 +40,36 @@ class Variety(BaseModel):
     name: str
 
     def __str__(self):
-        return(self.name)
+        return self.name
+
 
 class Process(BaseModel):
     id: int
     name: str
 
     def __str__(self):
-        return(self.name)
+        return self.name
+
+
+class CoffeeUser(BaseModel):
+    id: int
+    name: str
+
+    def __str__(self):
+        return self.name
 
 
 class Coffee(BaseModel):
     id: int
+    date_added: datetime.datetime
+    added_by: CoffeeUser
     name: str
     country_of_origin: Country
     roastery: Roastery
     process: Process
-    varietal: Variety
+    varietal: List[Variety]
     elevation: Optional[int] = None
+    tasting_notes: Optional[str] = None
 
     def __str__(self):
-        return(self.name)
+        return self.name
