@@ -1,17 +1,29 @@
 import datetime
 from typing import List, Optional
-from pydantic import BaseModel
+
+from pydantic import BaseModel, validator
 from geopy.geocoders import Nominatim
 
 
-class Continent(BaseModel):
+class BaseCoffeeDbObject(BaseModel):
     id: int
     name: str
 
+    @validator("name")
+    def name_must_be_capitalized(cls, v):
+        if not v[0].isupper():
+            raise ValueError("name must be capitalized")
+        return v
 
-class Country(BaseModel):
-    id: int
-    name: str
+    def __str__(self):
+        return self.name
+
+
+class Continent(BaseCoffeeDbObject):
+    pass
+
+
+class Country(BaseCoffeeDbObject):
     continent: Optional[Continent] = None
 
     def get_lat_long(self) -> tuple[int, int]:
@@ -22,48 +34,26 @@ class Country(BaseModel):
         loc = geolocator.geocode(self.name)
         return (loc.latitude, loc.longitude)
 
-    def __str__(self):
-        return self.name
 
-
-class Roastery(BaseModel):
-    id: int
-    name: str
+class Roastery(BaseCoffeeDbObject):
     country: Country
 
-    def __str__(self):
-        return self.name
+
+class Variety(BaseCoffeeDbObject):
+    pass
 
 
-class Variety(BaseModel):
-    id: int
-    name: str
-
-    def __str__(self):
-        return self.name
+class Process(BaseCoffeeDbObject):
+    pass
 
 
-class Process(BaseModel):
-    id: int
-    name: str
-
-    def __str__(self):
-        return self.name
+class CoffeeUser(BaseCoffeeDbObject):
+    pass
 
 
-class CoffeeUser(BaseModel):
-    id: int
-    name: str
-
-    def __str__(self):
-        return self.name
-
-
-class Coffee(BaseModel):
-    id: int
+class Coffee(BaseCoffeeDbObject):
     date_added: datetime.datetime
     added_by: CoffeeUser
-    name: str
     country_of_origin: Country
     roastery: Roastery
     process: Process
@@ -71,5 +61,14 @@ class Coffee(BaseModel):
     elevation: Optional[int] = None
     tasting_notes: Optional[str] = None
 
-    def __str__(self):
-        return self.name
+    @validator("elevation")
+    def name_must_be_capitalized(cls, v):
+        if v:
+            if v <= 0:
+                raise ValueError("elevation must be greater than zero")
+        return v
+
+    @validator("tasting_notes")
+    def tasting_notes_must_be_lower_case(cls, v):
+        if not v.islower():
+            raise ValueError("tasting notes must be comma separated, and lower case")
