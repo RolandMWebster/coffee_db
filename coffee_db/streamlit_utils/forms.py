@@ -246,11 +246,6 @@ class CoffeeForm(EntryForm):
     def build_payload(self, coffee_users, countries, roasteries, processes, varieties):
         payload = {"id": 1}  # NOTE: The ID is handled by the database, so is set to a default value here
         payload["name"] = st.text_input("Name")
-        payload["added_by"] = st.selectbox(
-            "Added By",
-            options=coffee_users,
-            format_func=lambda x: x.name,
-        )
         payload["country_of_origin"] = st.selectbox(
             "Country of Origin",
             options=countries,
@@ -281,6 +276,12 @@ class CoffeeForm(EntryForm):
         if payload["varietal"] == []:
             payload["varietal"] = [x for x in varieties if x.name == "Unknown"]
 
+        payload["added_by"] = st.selectbox(
+            "Added By",
+            options=coffee_users,
+            format_func=lambda x: x.name,
+        )
+
         payload["date_added"] = datetime.now(tz=timezone("GMT")).strftime('%Y-%m-%d %H:%M:%S')
 
         return payload
@@ -291,8 +292,6 @@ class CoffeeForm(EntryForm):
     def extract_row_values(self, payload: dict):
 
         return (
-            payload["date_added"],
-            payload["added_by"].name,
             payload["name"],
             payload["country_of_origin"].name,
             payload["roastery"].name,
@@ -300,4 +299,6 @@ class CoffeeForm(EntryForm):
             ", ".join([variety.name for variety in payload["varietal"]]),
             payload["elevation"],
             payload["tasting_notes"],
+            payload["added_by"].name,
+            payload["date_added"],
         )
