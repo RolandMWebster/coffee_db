@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "coffee-db"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Ned Webster <edwardpwebster@gmail.com>"]
 readme = "README.md"
@@ -15,6 +15,9 @@ folium = "0.14.0"
 pydantic = "1.10.4"
 streamlit-folium = "^0.11.1"
 
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core"]
