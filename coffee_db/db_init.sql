@@ -14,27 +14,28 @@ CREATE TABLE coffee (
 CREATE TABLE roastery (
   id serial PRIMARY KEY,
   name VARCHAR,
-  country VARCHAR
+  country VARCHAR,
+  UNIQUE (name, country)
 );
 
 CREATE TABLE process (
   id serial PRIMARY KEY,
-  name VARCHAR
+  name VARCHAR UNIQUE
 );
 
 CREATE TABLE variety (
   id serial PRIMARY KEY,
-  name VARCHAR
+  name VARCHAR UNIQUE
 );
 
 CREATE TABLE country (
   id serial PRIMARY KEY,
-  name VARCHAR
+  name VARCHAR UNIQUE
 );
 
 CREATE TABLE coffee_user (
   id serial PRIMARY KEY,
-  name VARCHAR
+  name VARCHAR UNIQUE
 );
 
 INSERT INTO coffee (id, date_added, added_by, name, country_of_origin, roastery, process, varietal, elevation, tasting_notes) VALUES
