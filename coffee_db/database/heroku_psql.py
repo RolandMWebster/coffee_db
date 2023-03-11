@@ -61,8 +61,10 @@ class CoffeeDB():
             INSERT INTO {0}
             VALUES ({1}%s)
         """.format(table, value_format)
-
-        self._execute(query, values)
+        try:
+            self._execute(query, values)
+        except psycopg2.errors.UniqueViolation:
+            return f"This {table} already exists in the database"
 
     def remove_row(self, table: str, row_id: tuple) -> None:
         """
