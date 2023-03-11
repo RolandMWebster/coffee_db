@@ -71,10 +71,14 @@ class EntryForm(ABC):
             if submit:
                 validated = self.validate_payload(payload)
                 if isinstance(validated, self.coffee_db_object()):
-                    self.db.insert_row(
+                    message = self.db.insert_row(
                         self.header,
                         self.extract_row_values(payload)
                     )
+                    if message:
+                        st.warning(message)
+                    else:
+                        st.experimental_rerun()
                 else:
                     st.warning(validated)
 
