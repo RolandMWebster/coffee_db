@@ -51,4 +51,3 @@ class InputValidator:
     @staticmethod
     def validate_coffee_payload(payload: dict):
         return validate_payload(payload, Coffee)
- 
