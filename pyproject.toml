@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "coffee-db"
-version = "0.2.0"
+version = "0.2.1"
 description = ""
 authors = ["Ned Webster <edwardpwebster@gmail.com>"]
 readme = "README.md"
