@@ -125,10 +125,7 @@ class PostgresDataLoader:
         roasteries = self._get_roasteries(countries)
         coffees = self._get_coffees(countries, roasteries, varieties, processes, coffee_users)
         return (
-            list(countries.values()),
-            list(roasteries.values()),
-            list(coffees.values()),
-            list(processes.values()),
-            list(varieties.values()),
-            list(coffee_users.values())
+            sorted(list(data.values()), key=lambda x: x.name) for data in [
+                coffees, coffee_users, countries, processes, roasteries, varieties
+            ]
         )

@@ -116,7 +116,7 @@ if __name__ == "__main__":
     db = CoffeeDB()
     data_loader = PostgresDataLoader(db=db)
 
-    countries, roasteries, coffees, processes, varieties, coffee_users = data_loader.get_data()
+    coffees, coffee_users, countries, processes, roasteries, varieties = data_loader.get_data()
 
     input_validator = InputValidator()
 
